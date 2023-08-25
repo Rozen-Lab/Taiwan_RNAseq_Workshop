@@ -1,6 +1,9 @@
 # install all the required packages
 install.packages("data.table")
 install.packages('Matrix')
+# new
+install.packages("BiocManager")
+
 BiocManager::install("ggplot2")
 install.packages('patchwork')
 install.packages('gridExtra')
@@ -8,9 +11,6 @@ install.packages('RColorBrewer')
 BiocManager::install("Seurat")
 install.packages('clustree')
 install.packages('pheatmap')
-
-# new
-install.packages("BiocManager")
 
 BiocManager::install("clusterProfiler")
 install.packages('msigdbr')
