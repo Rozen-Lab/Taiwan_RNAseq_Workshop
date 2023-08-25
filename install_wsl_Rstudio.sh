@@ -2,7 +2,7 @@ sudo apt-get update
 sudo apt-get upgrade -y
 sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
 sudo add-apt-repository 'deb https://cloud.r-project.org/bin/linux/ubuntu focal-cran40/'
-sudo apt install -y r-base r-base-core r-recommended r-base-dev gdebi-core build-essential libcurl4-gnutls-dev libxml2-dev libssl-dev
+sudo apt install -y r-base r-base-core r-recommended r-base-dev gdebi-core build-essential libcurl4-gnutls-dev libxml2-dev libssl-dev libfontconfig1-dev libhdf5-dev
 # install Rstudio server version
 chmod 644 .wget-hsts #if 777 the wget may not work # error: Will not apply HSTS
 sudo apt-get install gdebi-core
