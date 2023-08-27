@@ -1,3 +1,5 @@
+#================================== Chapter 2.2.4 ====================================
+
 ##### Load required packages
 rm(list = ls())
 library(data.table)
@@ -36,7 +38,7 @@ for(i in names(colLib)){
 }
 rm(tmp)
 
-#==================================Chapter 2====================================
+#==================================Chapter 2.3.4 ====================================
 ### A. Perform QC
 # Compute cell QC metrics
 oupQCcell <- data.table(
@@ -95,6 +97,7 @@ ggsave(p1 + p2, width = 10, height = 4, filename = "images/basicGeneQC.png")
 oupQCgene <- oupQCgene[cellExpr >= 8]
 inpUMIs <- inpUMIs[as.character(oupQCgene$gene), ]
 
+#================================== Chapter 2.4.5 ====================================
 ### B. Create Seurat object + Preprocessing
 # Create Seurat Object
 # nCount_RNA = & no. UMI counts; nFeature_RNA = no. detected genes
@@ -130,6 +133,7 @@ p2 <- LabelPoints(plot = p2, repel = TRUE, points = VariableFeatures(seu)[1:10])
 ggsave(p1 + p2 + plot_layout(guides = "collect"), 
        width = 10, height = 4, filename = "images/basicHVG.png")
 
+#================================== Chapter 2.5.6 ====================================
 ### C. PCA / tSNE / UMAP
 # Run PCA
 seu <- ScaleData(object = seu)    # Scale data prior to PCA
