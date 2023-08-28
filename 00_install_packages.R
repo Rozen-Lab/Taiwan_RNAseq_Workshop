@@ -21,6 +21,7 @@ if(!dir.exists("0data/")){
   # create the folder to store downloaded h5 files
   dir.create("0data/")
   # get the data and put the unzipped data in 0data
+  # The following calls to system do not work on Windows
   system("wget -O 0data/bmRawCounts.zip https://www.dropbox.com/s/7cs0mhdlbu1e437/bmRawCounts.zip?dl=0")  
   system("cd 0data; unzip bmRawCounts.zip")
 }
