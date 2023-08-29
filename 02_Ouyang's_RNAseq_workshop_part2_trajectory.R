@@ -9,8 +9,9 @@ library(reticulate)
 # install_python(version='3.8')
 # ask Rstudio to look for python virtual env, need to change linux user name here
 # or custumize new environment using virtualenv_create(<env_name>)
-#use_virtualenv('/home/<USERNAME>/.virtualenvs/r-reticulate/', required = T)
+# use_virtualenv('/home/<USERNAME>/.virtualenvs/r-reticulate/', required = T)
 # need to restart R session if necessary
+# change in the below running session as well
 use_virtualenv('/home/enol/.virtualenvs/r-reticulate/', required = T)
 py_install("scanpy")
 py_install("anndata")
@@ -33,6 +34,8 @@ devtools::install_github('satijalab/seurat-wrappers')
 
 #==================================Chapter 4.1.7 ====================================
 ###Load required packages
+library(reticulate)
+use_virtualenv('/home/enol/.virtualenvs/r-reticulate/', required = T)
 rm(list = ls())
 library(data.table)
 library(Matrix)
