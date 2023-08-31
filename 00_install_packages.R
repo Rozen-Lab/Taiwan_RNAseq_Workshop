@@ -16,9 +16,7 @@ BiocManager::install("clusterProfiler")
 install.packages('msigdbr')
 install.packages('hdf5r')
 
-# For chapter 4
-install.packages("pdist")
-install.packages("phateR")
+# IMPORTANT For chapter 4, run 02_Ouyang's_RNA_seq_workshop_part2_trajectory.R
 
 if(!dir.exists("0data/")){
   # presumably we need to download the data
