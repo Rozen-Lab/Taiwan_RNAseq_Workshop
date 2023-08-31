@@ -18,7 +18,7 @@ install.packages('hdf5r')
 
 # For chapter 4
 install.packages("pdist")
-install.packages("phate")
+install.packages("phateR")
 
 if(!dir.exists("0data/")){
   # presumably we need to download the data
