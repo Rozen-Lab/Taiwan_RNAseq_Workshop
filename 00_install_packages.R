@@ -16,6 +16,10 @@ BiocManager::install("clusterProfiler")
 install.packages('msigdbr')
 install.packages('hdf5r')
 
+# For chapter 4
+install.packages("pdist")
+install.packages("phate")
+
 if(!dir.exists("0data/")){
   # presumably we need to download the data
   # create the folder to store downloaded h5 files
