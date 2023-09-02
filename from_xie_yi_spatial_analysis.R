@@ -1,38 +1,40 @@
 
 # Please use following the code to test if package has been installed:
 library(Seurat)
+
+devtools::install_github('satijalab/seurat-data')
 library(SeuratData)
 library(ggplot2)
 library(patchwork)
 library(dplyr)
+
+options(timeout = 600000000) ### set this to avoid timeout error
+devtools::install_github("dmcable/spacexr", build_vignettes = FALSE)
+
 library(spacexr)
 library(Rfast)
 library(ape)
 
 # Missing package can be installed by using install.packages()​
-# spacexr​ need to be installed with devtools::install_github("dmcable/spacexr", build_vignettes = FALSE)​
+# spacexr​ need to be installed with 
 
-# Following data needs to be downloaded and placed in their own folder '../data/'​
+# This is the link from the tutorial to
+# The code below expects it to be in "../data/mouse_hippocampus_reference.rds"
 # https://www.dropbox.com/s/cs6pii5my4p3ke3/mouse_hippocampus_reference.rds?dl=0
+
+# This is the link from the tutorial to Allen Brain atlas cortex data.
+# The below expects it be in ../data/allen_cortex.rds
+# 
 # https://www.dropbox.com/s/cuowvm4vrf65pvq/allen_cortex.rds?dl=1
-
-
 
 
 # Link to the tutorial:
 # https://satijalab.org/seurat/articles/spatial_vignette
-setwd('C:/Users/e0205142/OneDrive - National University of Singapore/Others/tw workshop/spatial_Seurat/script/')
+# setwd('C:/Users/e0205142/OneDrive - National University of Singapore/Others/tw workshop/spatial_Seurat/script/')
 
-library(Seurat)
-library(ggplot2)
-library(patchwork)
-library(dplyr)
-library(spacexr)
+rm(list = ls())
 
-
-# devtools::install_github('satijalab/seurat-data')
-library(SeuratData)
-InstallData("stxBrain")
+SeuratData::InstallData("stxBrain")
 
 # 10x Visium--------------
 ## Dataset-------------------
@@ -50,9 +52,14 @@ brain <- SCTransform(brain, assay = "Spatial", verbose = FALSE)
 SpatialFeaturePlot(brain, features = c("Hpca", "Ttr"))
 
 ### 2. plot and export figure as jpg
-plot <- SpatialFeaturePlot(brain, features = c("Ttr")) + theme(legend.text = element_text(size = 0),
-                                                               legend.title = element_text(size = 20), legend.key.size = unit(1, "cm"))
-jpeg(filename = "../output/images/spatial_vignette_ttr.jpg", height = 700, width = 1200, quality = 50)
+plot <- SpatialFeaturePlot(brain, features = c("Ttr")) +
+  theme(legend.text = element_text(size = 0),
+        legend.title = element_text(size = 20), 
+        legend.key.size = unit(1, "cm"))
+# Manually make sure ./output/images/" exists.
+# This is changed from the original vignette, where it was ../output
+jpeg(filename = "./output/images/spatial_vignette_ttr.jpg",
+     height = 700, width = 1200, quality = 50)
 print(plot)
 dev.off()
 
