@@ -15,16 +15,14 @@ library(patchwork)
 library(dplyr)
 
 if (!require(spacexr)) {
-options(timeout = 600000000) ### set this to avoid timeout error
-devtools::install_github("dmcable/spacexr", build_vignettes = FALSE)
-library(spacexr)
+  options(timeout = 600000000) ### set this to avoid timeout error
+  devtools::install_github("dmcable/spacexr", build_vignettes = FALSE)
+  library(spacexr)
 }
 
 library(Rfast)
+library(Rfast2)
 library(ape)
-
-# Missing package can be installed by using install.packages()​
-# spacexr​ need to be installed with 
 
 # This is the link from the tutorial to
 # The code below expects it to be in "../data/mouse_hippocampus_reference.rds"
@@ -52,6 +50,7 @@ plot1 <- VlnPlot(brain, features = "nCount_Spatial", pt.size = 0.1) + NoLegend()
 plot2 <- SpatialFeaturePlot(brain, features = "nCount_Spatial") + theme(legend.position = "right")
 wrap_plots(plot1, plot2)
 
+# Somewhat slow:
 brain <- SCTransform(brain, assay = "Spatial", verbose = FALSE)
 
 ## Gene expression visualization----------------
@@ -82,26 +81,50 @@ brain <- FindNeighbors(brain, reduction = "pca", dims = 1:30)
 brain <- FindClusters(brain, verbose = FALSE)
 brain <- RunUMAP(brain, reduction = "pca", dims = 1:30)
 
+# Just checking -- new code
+names(brain)
+slotName(brains)
+
+
 p1 <- DimPlot(brain, reduction = "umap", label = TRUE)
 p2 <- SpatialDimPlot(brain, label = TRUE, label.size = 3)
 p1 + p2
 
-SpatialDimPlot(brain, cells.highlight = CellsByIdentities(object = brain, idents = c(2, 1, 4, 3,
-                                                                                     5, 8)), facet.highlight = TRUE, ncol = 3)
+SpatialDimPlot(
+  object = brain, 
+  pt.size.factor = 2,
+  
+  cells.highlight =
+    CellsByIdentities(object = brain, 
+                      idents = c(2, 1, 4, 3,  5, 8)), 
+  facet.highlight = TRUE, ncol = 3)
+
+
+
+
 ##### WATCH OUT!
 ### Interactive plotting---------------------
 SpatialDimPlot(brain, interactive = TRUE)
 
-SpatialFeaturePlot(brain, features = "Ttr", interactive = TRUE)
+SpatialFeaturePlot(
+  brain, 
+                   features = "Ttr", 
+  interactive = TRUE)
 
 LinkedDimPlot(brain)
+# End of interactive plots
+
 
 ## Identification of Spatially Variable Features----------
 de_markers <- FindMarkers(brain, ident.1 = 5, ident.2 = 6)
-SpatialFeaturePlot(object = brain, features = rownames(de_markers)[1:3], alpha = c(0.1, 1), ncol = 3)
+View(de_markers)
+SpatialFeaturePlot(object = brain, 
+                   features = rownames(de_markers)[1:3], 
+                   alpha = c(0.1, 1), ncol = 3)
 
-brain <- FindSpatiallyVariableFeatures(brain, assay = "SCT", features = VariableFeatures(brain)[1:1000],
-                                       selection.method = "moransi")
+brain <- FindSpatiallyVariableFeatures(
+  brain, assay = "SCT", features = VariableFeatures(brain)[1:1000],
+  selection.method = "moransi")
 
 top.features <- head(SpatiallyVariableFeatures(brain, selection.method = "moransi"), 6)
 SpatialFeaturePlot(brain, features = top.features, ncol = 3, alpha = c(0.1, 1))
@@ -109,8 +132,7 @@ SpatialFeaturePlot(brain, features = top.features, ncol = 3, alpha = c(0.1, 1))
 ## Subset out anatomical regions-----------------
 cortex <- subset(brain, idents = c(1, 2, 3, 4, 6, 7))
 # now remove additional cells, use SpatialDimPlots to visualize what to remove
-# SpatialDimPlot(cortex,cells.highlight = WhichCells(cortex, expression = image_imagerow > 400
-# | image_imagecol < 150))
+# SpatialDimPlot(cortex,cells.highlight = WhichCells(cortex, expression = image_imagerow > 400 | image_imagecol < 150))
 cortex <- subset(cortex, anterior1_imagerow > 400 | anterior1_imagecol < 150, invert = TRUE)
 cortex <- subset(cortex, anterior1_imagerow > 275 & anterior1_imagecol > 370, invert = TRUE)
 cortex <- subset(cortex, anterior1_imagerow > 250 & anterior1_imagecol > 440, invert = TRUE)
@@ -136,23 +158,42 @@ cortex <- SCTransform(cortex, assay = "Spatial", verbose = FALSE) %>%
 DimPlot(allen_reference, group.by = "subclass", label = TRUE)
 
 anchors <- FindTransferAnchors(reference = allen_reference, query = cortex, normalization.method = "SCT")
-predictions.assay <- TransferData(anchorset = anchors, refdata = allen_reference$subclass, prediction.assay = TRUE,
-                                  weight.reduction = cortex[["pca"]], dims = 1:30)
+predictions.assay <- 
+  TransferData(anchorset = anchors, 
+               refdata = allen_reference$subclass, prediction.assay = TRUE,
+               weight.reduction = cortex[["pca"]], dims = 1:30)
 cortex[["predictions"]] <- predictions.assay
 
 
 DefaultAssay(cortex) <- "predictions"
-SpatialFeaturePlot(cortex, features = c("L2/3 IT", "L4"), pt.size.factor = 1.6, ncol = 2, crop = TRUE)
+SpatialFeaturePlot(cortex,
+                   features = c("L2/3 IT", "L4"), 
+                   pt.size.factor = 1.6, ncol = 2, crop = TRUE)
 
 
-cortex <- FindSpatiallyVariableFeatures(cortex, assay = "predictions", selection.method = "moransi",
-                                        features = rownames(cortex), r.metric = 5, slot = "data")
-top.clusters <- head(SpatiallyVariableFeatures(cortex, selection.method = "moransi"), 4)
+cortex <- 
+  FindSpatiallyVariableFeatures(
+    cortex, 
+    assay = "predictions", selection.method = "moransi",
+    features = rownames(cortex), r.metric = 5, slot = "data")
+
+top.clusters <- 
+  head(
+    SpatiallyVariableFeatures(
+      cortex, selection.method = "moransi"), 4)
+
 SpatialPlot(object = cortex, features = top.clusters, ncol = 2)
 
-
-SpatialFeaturePlot(cortex, features = c("Astro", "L2/3 IT", "L4", "L5 PT", "L5 IT", "L6 CT", "L6 IT",
-                                        "L6b", "Oligo"), pt.size.factor = 1, ncol = 2, crop = FALSE, alpha = c(0.1, 1))
+xf <- c("Astro", "L2/3 IT", "L4", "L5 PT", 
+        "L5 IT", "L6 CT", "L6 IT", "L6b", "Oligo")
+xf <- c("L6 CT", "L6 IT", "L6b", "Oligo")
+SpatialFeaturePlot(
+  object = cortex, 
+  features = xf,    , 
+  pt.size.factor = 1,
+  ncol = 4, 
+  crop = FALSE, 
+  alpha = c(0.1, 1))
 
 
 ## Working with multiple slices in Seurat-------------
@@ -178,6 +219,12 @@ SpatialFeaturePlot(brain.merge, features = c("Hpca", "Plp1"))
 
 
 # Slide-seq----------------------
+
+# Slide-seq paper: https://www.science.org/doi/10.1126/science.aaw1219
+# Rodriguez et al
+
+
+
 ## Dataset--------------
 InstallData("ssHippo")
 slide.seq <- LoadData("ssHippo")
