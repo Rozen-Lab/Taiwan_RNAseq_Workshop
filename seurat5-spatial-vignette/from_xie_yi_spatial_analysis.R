@@ -1,17 +1,25 @@
+rm(list = ls())
+setwd("seurat5-spatial-vignette")
 
 # Please use following the code to test if package has been installed:
 library(Seurat)
 
-devtools::install_github('satijalab/seurat-data')
-library(SeuratData)
+if (!require(SeuratData)) {
+  # Somewhat slow to install
+  devtools::install_github('satijalab/seurat-data')
+  library(SeuratData)
+}
+
 library(ggplot2)
 library(patchwork)
 library(dplyr)
 
+if (!require(spacexr)) {
 options(timeout = 600000000) ### set this to avoid timeout error
 devtools::install_github("dmcable/spacexr", build_vignettes = FALSE)
-
 library(spacexr)
+}
+
 library(Rfast)
 library(ape)
 
@@ -32,7 +40,6 @@ library(ape)
 # https://satijalab.org/seurat/articles/spatial_vignette
 # setwd('C:/Users/e0205142/OneDrive - National University of Singapore/Others/tw workshop/spatial_Seurat/script/')
 
-rm(list = ls())
 
 SeuratData::InstallData("stxBrain")
 
