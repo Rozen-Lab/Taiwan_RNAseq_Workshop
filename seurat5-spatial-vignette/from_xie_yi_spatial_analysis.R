@@ -214,9 +214,11 @@ DimPlot(brain.merge, reduction = "umap", group.by = c("ident", "orig.ident"))
 
 SpatialDimPlot(brain.merge)
 
-SpatialFeaturePlot(brain.merge, features = c("Hpca", "Plp1"))
+SpatialFeaturePlot(
+  brain.merge, 
+  features = c("Hpca", "Plp1"))
 
-
+rm(list = ls())
 
 # Slide-seq----------------------
 
