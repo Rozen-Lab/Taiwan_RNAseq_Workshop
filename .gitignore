@@ -4,3 +4,8 @@
 .Ruserdata
 tmptmp
 spatial/output
+spatial-Seurat/visium.Rdata
+spatial-Seurat/slide-seq.Rdata
+data/allen_cortex.rds
+data/mouse_hippocampus_reference.rds
+
