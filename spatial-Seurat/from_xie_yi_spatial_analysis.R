@@ -1,5 +1,5 @@
 rm(list = ls())
-setwd("seurat5-spatial-vignette")
+setwd("spatial-Seurat")
 
 # Please use following the code to test if package has been installed:
 library(Seurat)
